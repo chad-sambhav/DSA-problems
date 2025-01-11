@@ -1,0 +1,48 @@
+class Solution {
+public:
+bool check_diagonal(vector<string>& v ,int n, int r, int c){
+    //only need to check the diagonls of already setted queens
+    int col_l = c-1;
+    int col_r = c+1;
+    for(int i = r-1; i>=0; i--){
+        if(col_l >= 0 && v[i].find('Q') == col_l){
+            return false;
+        }
+        if(col_r < n && v[i].find('Q') == col_r){
+            return false;
+        }
+        col_l--;
+        col_r++;
+    }
+    return true;
+
+}
+void fun(int r, int n, vector<string>& v, vector<vector<string>>& ans, unordered_map<int, int>& mpp){
+    
+    if(r == n){
+        ans.push_back(v);
+        return;
+    }
+
+    for(int i = 0; i<n; i++){
+        
+        if(check_diagonal(v,n,r,i) && mpp[i] == 0){
+            string s(n, '.');
+            s[i] = 'Q';
+            mpp[i]++;
+            v.push_back(s);
+            fun(r+1, n, v, ans, mpp);
+            v.pop_back();
+            mpp[i]--;
+        }
+    }
+
+}
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> ans;
+        vector<string> v;
+        unordered_map<int, int> mpp;
+        fun(0, n, v, ans,mpp);
+        return ans;
+    }
+};
